@@ -33,3 +33,34 @@ Hệ thống vẫn trả về `401 Unauthorized` (hoặc thông báo tài khoả
 
 **Link GitHub Issue:** 
 👉 *[Sinh viên copy nội dung này tạo Issue trên GitHub và dán link vào đây]*
+
+
+## 2. BUG-CHECKOUT-001: Thiếu hoàn toàn Validation tại API Checkout
+
+**Thông tin chung:**
+- **API:** POST /api/checkout
+- **Mức độ nghiêm trọng (Severity):** Critical (Nghiêm trọng nhất)
+- **Ngày phát hiện:** 19/08/2026
+- **Người báo cáo:** Hồ Gia Huy
+
+**Mô tả:**
+API POST /api/checkout không hề có bất kỳ lớp Validation (kiểm tra dữ liệu đầu vào) nào. Backend ngây thơ chấp nhận tất cả các payload không hợp lệ và vẫn trả về \200 OK\ kèm theo việc tạo đơn hàng thành công trong Database. Cụ thể, API chấp nhận số tiền âm, số tiền bằng 0, địa chỉ trống, sai kiểu dữ liệu (NaN, chuỗi chữ), thiếu trường bắt buộc, và thậm chí cả mã độc XSS/SQL Injection. Điều này gây thất thoát tài chính và hổng bảo mật nghiêm trọng.
+
+**Các bước tái hiện (Steps to Reproduce):**
+1. Đăng nhập thành công và lấy Bearer Token hợp lệ.
+2. Gửi request \POST /api/checkout\ với Body: \{\
+total_amount\: -50000, \shipping_address\: \\}\.
+3. Quan sát kết quả.
+
+**Kết quả mong đợi (Expected Result):**
+Hệ thống phải trả về \400 Bad Request\ và từ chối tạo đơn hàng do số tiền không hợp lệ và thiếu địa chỉ.
+
+**Kết quả thực tế (Actual Result):**
+Hệ thống trả về \200 OK\ với nội dung \{\message\:\Checkout
+successful\,\orderId\: X}\. Đơn hàng với tổng tiền âm được tạo thành công trong DB.
+
+**Test Case liên quan:** 
+- Gần 24 Test case Validation (VD: TC_CHK_002, TC_CHK_003, TC_CHK_020...) - Đều bị FAIL do server trả về 200.
+
+**Link GitHub Issue:** 
+👉 *[Sinh viên copy nội dung này tạo Issue trên GitHub và dán link vào đây]*

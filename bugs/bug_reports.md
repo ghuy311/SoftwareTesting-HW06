@@ -64,3 +64,45 @@ successful\,\orderId\: X}\. Đơn hàng với tổng tiền âm được tạo t
 
 **Link GitHub Issue:** 
 👉 *[Sinh viên copy nội dung này tạo Issue trên GitHub và dán link vào đây]*
+
+
+## 3. BUG-ORDER-001: Lỗi State Machine cho phép chuyển đơn hàng từ Canceled sang Delivered
+
+**Thông tin chung:**
+- **API:** \PUT /api/admin/orders/:id/status\
+- **Mức độ nghiêm trọng (Severity):** High (Cao)
+- **Ngày phát hiện:** 19/08/2026
+- **Người báo cáo:** Hồ Gia Huy
+
+**Mô tả:**
+Hệ thống State Machine quản lý trạng thái đơn hàng bị lỗi nghiêm trọng trong việc kiểm tra tính hợp lệ của luồng đi (Workflow). Mặc dù hệ thống có chặn một số luồng ngược (ví dụ từ \delivered\ về \confirmed\ bị chặn trả về 400), nhưng nó lại **cho phép đơn hàng đã bị hủy (canceled) chuyển thẳng sang trạng thái đã giao (delivered)**. Điều này là vô lý về mặt quy trình nghiệp vụ vì đơn hàng đã hủy thì không thể đem đi giao thành công được.
+
+Đồng thời, lỗi rò rỉ trạng thái (State Leakage) này đã khiến cho toàn bộ các test case Happy Path phía sau (TC_ORD_001, 002, 003, 004) bị đánh rớt oan uổng do đơn hàng đã bị kẹt vĩnh viễn ở trạng thái \delivered\.
+
+**Các bước tái hiện (Steps to Reproduce):**
+1. Đăng nhập bằng tài khoản Admin để lấy Token hợp lệ.
+2. Cập nhật trạng thái một đơn hàng thành \canceled\ (VD gọi \PUT /api/admin/orders/1/status\ với body \{\
+status\: \canceled\}\).
+3. Gửi tiếp một request cập nhật trạng thái đơn hàng đó thành \delivered\ (\{\status\: \delivered\}\).
+4. Quan sát kết quả.
+
+**Kết quả mong đợi (Expected Result):**
+Hệ thống phải trả về \400 Bad Request\ kèm thông báo lỗi *Không
+thể
+cập
+nhật
+đơn
+hàng
+đã
+hủy*.
+
+**Kết quả thực tế (Actual Result):**
+Hệ thống trả về \200 OK\ và thông báo \{\message\:\Order
+status
+updated\}\. Đơn hàng chuyển sang \delivered\ bất hợp pháp.
+
+**Test Case liên quan:** 
+- TC_ORD_040, TC_ORD_037
+
+**Link GitHub Issue:** 
+👉 *[Sinh viên copy nội dung này tạo Issue trên GitHub và dán link vào đây]*

@@ -37,6 +37,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **Artifact #1**<br>**Thời gian:** 2026-08-17 17:46:25 UTC+7<br>**Công cụ:** Antigravity (Gemini 3.6 Flash)<br>**Prompt:**<br>*"Đọc và phân tích HW06 sau đó hãy xây dựng cây thư mục cấu trúc bài nộp"* | Phân tích đề bài HW06, tự động sinh khung cây thư mục bài nộp (`reports/`, `postman/`, `test_cases/`, `agent_skill/`, `api_spec/`, `bugs/`, `ai_audit/`, `.github/`) và khởi tạo file `README.md`. Trong `README.md` ban đầu hiển thị đường dẫn tuyệt đối dạng `file:///c:/Users/...`. | `INCOMPLETE` | **ISTQB Test Organization & Quality Attributes (Portability):** Theo Section 14 đề bài HW06, cấu trúc bài nộp gói trong file zip phải mang tính tương đối (relative) và dễ di động. Việc AI xuất đường dẫn tuyệt đối local (`file:///c:/...`) khiến liên kết bị hỏng khi chấm bài trên môi trường khác. | Phản hồi yêu cầu AI điều chỉnh lại Section 3 trong `README.md`, vẽ lại sơ đồ cây thư mục tương đối dạng ASCII Tree (`<StudentID>_HW06_AI_API_<SelfAssessedGrade>/`) loại bỏ path cố định. |
 | **Artifact #2**<br>**Thời gian:** 2026-08-17 17:48:38 UTC+7<br>**Công cụ:** Antigravity (Gemini 3.6 Flash)<br>**Prompt:**<br>*"tại readme.md cấu trúc bài nộp nên vẽ ra thành cây thư mục không dùng path cố định"* | Cập nhật Section 3 trong `README.md` thành sơ đồ cây thư mục trực quan dạng ASCII Tree dạng tương đối `<StudentID>_HW06_AI_API_<SelfAssessedGrade>/`, loại bỏ hoàn toàn các đường dẫn tuyệt đối local `file:///c:/...`. | `VALID` | **ISTQB Test Documentation Standards:** Sơ đồ cây thư mục ASCII Tree biểu diễn trực quan, chính xác cấu trúc gói bài nộp tương đối theo đúng quy định Section 14, đảm bảo tính di động và dễ rà soát khi chấm bài. | Chấp nhận và giữ nguyên bản sửa của AI (dùng trực tiếp). |
+| **Artifact #3**<br>**Thời gian:** 2026-08-19 20:25:00 UTC+7<br>**Công cụ:** Antigravity (Gemini 3.1 Pro)<br>**Prompt:**<br>*"Bạn là một Senior QA Automation Engineer. Hãy đọc kỹ đặc tả API Đăng nhập (FR-02)... Hãy sinh ĐÚNG VÀ ĐỦ 35 test cases..."* | Sinh ra bảng 35 test cases dưới dạng Markdown cho API `POST /api/login`, bao phủ 4 kỹ thuật (Domain Partitions, State Transitions, Security, Schema Validation). | `INCOMPLETE` | **ISTQB Test Design:** TC_LOGIN_018-020 dự đoán mã 429 và thông báo chi tiết khóa tài khoản, có thể vi phạm yêu cầu "không để lộ chi tiết" của FR-02. TC_LOGIN_025 thử NoSQL Injection trong khi kiến trúc SUT dùng SQLite. | Chấp nhận nền tảng. Bạn sẽ chủ động sửa Expected Result của TC_LOGIN_018-020 thành 401 Unauthorized / Message chung chung. Chuyển TC_LOGIN_025 thành payload SQLi khác phù hợp với SQLite. |
 
 ---
 
@@ -44,10 +45,10 @@
 
 | Chỉ số | Số lượng | Tỉ lệ |
 | :--- | :---: | :---: |
-| **Tổng artifact AI sinh đã audit** | 2 | 100% |
-| **VALID** *(đúng, dùng nguyên)* | 1 | 50% |
+| **Tổng artifact AI sinh đã audit** | 3 | 100% |
+| **VALID** *(đúng, dùng nguyên)* | 1 | 33% |
 | **INVALID** *(sai; loại bỏ)* | 0 | 0% |
-| **INCOMPLETE** *(chấp nhận sau khi sửa)* | 1 | 50% |
+| **INCOMPLETE** *(chấp nhận sau khi sửa)* | 2 | 67% |
 
 ---
 

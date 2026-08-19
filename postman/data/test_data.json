@@ -1,1 +1,224 @@
-
+[
+  {
+    "test_id": "TC_LOGIN_001",
+    "test_name": "Đăng nhập thành công với thông tin hợp lệ",
+    "payload": { "email": "test@eshop.com", "password": "Test1234!" },
+    "expected_status": 200
+  },
+  {
+    "test_id": "TC_LOGIN_007",
+    "test_name": "Email chứa khoảng trắng ở đầu/cuối",
+    "payload": { "email": " test@eshop.com ", "password": "Test1234!" },
+    "expected_status": 200
+  },
+  {
+    "test_id": "TC_LOGIN_011",
+    "test_name": "Email có chữ in hoa (Case-insensitive test)",
+    "payload": { "email": "TEST@ESHOP.COM", "password": "Test1234!" },
+    "expected_status": 200
+  },
+  {
+    "test_id": "TC_LOGIN_032",
+    "test_name": "Dư thừa trường dữ liệu không xác định",
+    "payload": { "email": "test@eshop.com", "password": "Test1234!", "role": "admin" },
+    "expected_status": 200
+  },
+  {
+    "test_id": "TC_LOGIN_003",
+    "test_name": "Email chưa được đăng ký trong hệ thống",
+    "payload": { "email": "notexist@eshop.com", "password": "Test1234!" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_004",
+    "test_name": "Email bị thiếu ký tự @",
+    "payload": { "email": "testeshop.com", "password": "Test1234!" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_005",
+    "test_name": "Email bị thiếu phần domain sau @",
+    "payload": { "email": "test@", "password": "Test1234!" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_006",
+    "test_name": "Email không có dấu . trong domain",
+    "payload": { "email": "test@eshop", "password": "Test1234!" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_008",
+    "test_name": "Email chứa khoảng trắng ở giữa",
+    "payload": { "email": "test @eshop.com", "password": "Test1234!" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_009",
+    "test_name": "Email để trống rỗng",
+    "payload": { "email": "", "password": "Test1234!" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_010",
+    "test_name": "Password để trống rỗng",
+    "payload": { "email": "test@eshop.com", "password": "" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_012",
+    "test_name": "Email quá dài (> 255 ký tự)",
+    "payload": { "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@eshop.com", "password": "Test1234!" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_013",
+    "test_name": "Password quá dài (> 255 ký tự)",
+    "payload": { "email": "test@eshop.com", "password": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_014",
+    "test_name": "Password chỉ có 1 ký tự",
+    "payload": { "email": "test@eshop.com", "password": "1" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_015",
+    "test_name": "Password chứa khoảng trắng ở đầu/cuối",
+    "payload": { "email": "test@eshop.com", "password": " Test1234! " },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_022",
+    "test_name": "SQL Injection vào trường Email (Bypass thử)",
+    "payload": { "email": "' OR '1'='1", "password": "Test1234!" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_023",
+    "test_name": "SQL Injection vào trường Password",
+    "payload": { "email": "test@eshop.com", "password": "' OR 1=1--" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_024",
+    "test_name": "SQL Injection (Blind / Time-based) vào Email",
+    "payload": { "email": "test@eshop.com' AND SLEEP(5)--", "password": "1" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_025",
+    "test_name": "SQL Injection (DROP TABLE)",
+    "payload": { "email": "a'; DROP TABLE users;--", "password": "1" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_026",
+    "test_name": "XSS Payload (Cross-Site Scripting) ở trường Email",
+    "payload": { "email": "<script>alert('xss')</script>", "password": "1" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_029",
+    "test_name": "Thiếu trường email (Missing field)",
+    "payload": { "password": "Test1234!" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_030",
+    "test_name": "Thiếu trường password (Missing field)",
+    "payload": { "email": "test@eshop.com" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_031",
+    "test_name": "Body rỗng hoàn toàn",
+    "payload": {},
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_033",
+    "test_name": "Sai kiểu dữ liệu cho trường email (Gửi dạng số)",
+    "payload": { "email": 123456, "password": "Test1234!" },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_034",
+    "test_name": "Sai kiểu dữ liệu cho trường password (Gửi boolean)",
+    "payload": { "email": "test@eshop.com", "password": true },
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_035",
+    "test_name": "JSON Syntax sai (Malformed JSON)",
+    "payload": "{\"email\": \"test@eshop.com\", \"password\": \"Test1234!\"",
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_036",
+    "test_name": "SQLi với Unicode Escape",
+    "payload": { "email": "\\u0027 OR 1=1--", "password": "1" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_037",
+    "test_name": "HTTP Parameter Pollution (Duplicate Key)",
+    "payload": "{\"email\": \"test@eshop.com\", \"email\": \"admin@eshop.com\", \"password\": \"1\"}",
+    "expected_status": 400
+  },
+  {
+    "test_id": "TC_LOGIN_039",
+    "test_name": "Email chứa Subdomain lồng nhau phức tạp",
+    "payload": { "email": "test@a.b.c.d.eshop.com", "password": "Test1234!" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_040",
+    "test_name": "Mật khẩu chứa ký tự Emoji",
+    "payload": { "email": "test@eshop.com", "password": "Test1234!😊" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_016",
+    "test_name": "Đăng nhập sai lần 1",
+    "payload": { "email": "test@eshop.com", "password": "Sai1" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_017",
+    "test_name": "Đăng nhập sai lần 2",
+    "payload": { "email": "test@eshop.com", "password": "Sai2" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_018",
+    "test_name": "Đăng nhập sai lần 3 (Kích hoạt Lockout)",
+    "payload": { "email": "test@eshop.com", "password": "Sai3" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_019",
+    "test_name": "Cố gắng đăng nhập khi tài khoản đang bị khóa (Password ĐÚNG)",
+    "payload": { "email": "test@eshop.com", "password": "Test1234!" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_020",
+    "test_name": "Cố gắng đăng nhập khi tài khoản đang bị khóa (Password SAI)",
+    "payload": { "email": "test@eshop.com", "password": "Sai4" },
+    "expected_status": 401
+  },
+  {
+    "test_id": "TC_LOGIN_021",
+    "test_name": "Đăng nhập thành công SAU KHI đợi 30s",
+    "payload": { "email": "test@eshop.com", "password": "Test1234!" },
+    "expected_status": 200
+  },
+  {
+    "test_id": "TC_LOGIN_038",
+    "test_name": "Đăng nhập SAI ngay sau khi hết hạn khóa 30s",
+    "payload": { "email": "test@eshop.com", "password": "Sai" },
+    "expected_status": 401
+  }
+]

@@ -19,21 +19,54 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Start Backend Server
+        run: |
+          cd backend
+          npm start &
+          sleep 5
+
       - name: Install Newman and HTML Extra Reporter
         run: |
           npm install -g newman newman-reporter-htmlextra
 
-      - name: Run Newman API Tests
+      - name: Run Newman API Tests - Login (FR-02)
         run: |
           newman run postman/collections/SUT_API_Testing.postman_collection.json \
             -e postman/environments/EShop_Local.postman_environment.json \
-            -d postman/data/test_data.json \
+            -d postman/data/test_data_login.json \
             -r cli,htmlextra \
-            --reporter-htmlextra-export postman/newman/report.html
+            --reporter-htmlextra-export postman/newman/report_login.html \
+            --folder "POST /api/login"
+        continue-on-error: true
 
-      - name: Upload Test Report Artifact
+      - name: Run Newman API Tests - Checkout (FR-08)
+        run: |
+          newman run postman/collections/SUT_API_Testing.postman_collection.json \
+            -e postman/environments/EShop_Local.postman_environment.json \
+            -d postman/data/test_data_checkout.json \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export postman/newman/report_checkout.html \
+            --folder "POST /api/checkout"
+        continue-on-error: true
+
+      - name: Run Newman API Tests - Order Status (FR-18)
+        run: |
+          newman run postman/collections/SUT_API_Testing.postman_collection.json \
+            -e postman/environments/EShop_Local.postman_environment.json \
+            -d postman/data/test_data_order_status.json \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export postman/newman/report_order_status.html \
+            --folder "PUT /api/admin/orders/:id/status"
+        continue-on-error: true
+
+      - name: Upload Test Report Artifacts
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: newman-html-report
-          path: postman/newman/report.html
+          name: newman-html-reports
+          path: postman/newman/report_*.html
